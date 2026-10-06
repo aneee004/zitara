@@ -1,0 +1,9 @@
+# Xcode
+SitarGrid.xcodeproj/
+xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+
+# macOS
+.DS_Store

@@ -1,0 +1,35 @@
+name: Zitara
+options:
+  bundleIdPrefix: com.yourname   # CHANGE THIS to something unique, e.g. com.ravi
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+targets:
+  Zitara:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - Sources
+    settings:
+      base:
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/Audio/Bridge/Zitara-Bridging-Header.h
+        CLANG_CXX_LANGUAGE_STANDARD: c++17
+        CLANG_ENABLE_MODULES: YES
+        TARGETED_DEVICE_FAMILY: "2"          # iPad only
+        CODE_SIGN_STYLE: Automatic
+        # DEVELOPMENT_TEAM: XXXXXXXXXX       # Set in Xcode (Signing & Capabilities) with your free Apple ID
+        SWIFT_VERSION: "5.0"
+        ENABLE_BITCODE: NO
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Zitara
+        UILaunchScreen: {}
+        UIStatusBarHidden: true
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait

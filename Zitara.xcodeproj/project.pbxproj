@@ -1,0 +1,440 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		15A25C3C4A4878D24E371B32 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD54C2510E833D8C0CD5213D /* Theme.swift */; };
+		1BAB773A856EF7250A9E1EDE /* PitchReadout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A6C8B199A27C944CC853D7 /* PitchReadout.swift */; };
+		27C7DBA0BB518EE7828F69FF /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5205855425D9A41E6CFEA68B /* AudioEngine.swift */; };
+		413FB0AE7C09E00CCF3D9F42 /* SitarSynthBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = B607E64C2728311B27797A12 /* SitarSynthBridge.mm */; };
+		4583656756C828D983221A87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7C243736AD23906486C6673 /* Assets.xcassets */; };
+		47BAF5022415D0834FD6F0D7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B18C4A3DFE73168F1F690B7 /* AppState.swift */; };
+		5C9D03CB219BCD78CD2B473E /* ScaleMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448CBA96E37589F71300AA46 /* ScaleMenuView.swift */; };
+		718D5B5388E4394D0F29A16A /* GridSurfaceRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09B99305E53D03207128D4 /* GridSurfaceRepresentable.swift */; };
+		728B9838F0864FA204E5CC77 /* XYPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845FC1CAF68226C6C3BFEB1 /* XYPadView.swift */; };
+		88793F97B0DEA7FE8007C230 /* TouchFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374289BB29E80CB3E5F02EB8 /* TouchFeedbackView.swift */; };
+		8B945CF1B1C43BCACB10C26A /* SitarSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2BD7FE3FE2A4CFAD6277952E /* SitarSynth.cpp */; };
+		8F3FE8098AEC544F2245302B /* MusicTheory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28322C892DE949ADEBCA88D /* MusicTheory.swift */; };
+		9F055320C17F271A79E7F55E /* PitchReadoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE88EFD13C4B4F60EA05AF /* PitchReadoutView.swift */; };
+		B11B893461BFD1322300DF65 /* ControlPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AF8D8AB504BB60D694DF02 /* ControlPanelView.swift */; };
+		B13867E5D5B56D314597F96D /* SustainStarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DFA493B1441765290241DB /* SustainStarView.swift */; };
+		D7237AA7E8CEB2B825D4EB32 /* GridSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3810D6437E513841CCA27 /* GridSurfaceView.swift */; };
+		DD3ABE812CD24FD6A6BDFC9A /* FaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7925DB07CE4D18FAA4286A /* FaderView.swift */; };
+		F04263A0F341B4B43431BE3A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BFC8C0BAD31971417BF940 /* ContentView.swift */; };
+		F32E938BF8585F63AA528345 /* RootKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FF3570D23F986E35C94DA /* RootKeyboardView.swift */; };
+		FC876EC9CE3A48FB20D71BA5 /* ZitaraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337B74760E3159F2B94606F1 /* ZitaraApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		07AF8D8AB504BB60D694DF02 /* ControlPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPanelView.swift; sourceTree = "<group>"; };
+		0BB80F0B114B20FAF768651D /* Zitara-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zitara-Bridging-Header.h"; sourceTree = "<group>"; };
+		1436425F14E13B593C995B10 /* Zitara.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Zitara.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BD7FE3FE2A4CFAD6277952E /* SitarSynth.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SitarSynth.cpp; sourceTree = "<group>"; };
+		337B74760E3159F2B94606F1 /* ZitaraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZitaraApp.swift; sourceTree = "<group>"; };
+		374289BB29E80CB3E5F02EB8 /* TouchFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchFeedbackView.swift; sourceTree = "<group>"; };
+		448CBA96E37589F71300AA46 /* ScaleMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleMenuView.swift; sourceTree = "<group>"; };
+		5205855425D9A41E6CFEA68B /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		5845FC1CAF68226C6C3BFEB1 /* XYPadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XYPadView.swift; sourceTree = "<group>"; };
+		6CFE88EFD13C4B4F60EA05AF /* PitchReadoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchReadoutView.swift; sourceTree = "<group>"; };
+		89BFC8C0BAD31971417BF940 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		92034692C100E8B8F3285836 /* SitarSynthBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SitarSynthBridge.h; sourceTree = "<group>"; };
+		9B18C4A3DFE73168F1F690B7 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A17EBF656219C62272D1D672 /* SitarSynth.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SitarSynth.hpp; sourceTree = "<group>"; };
+		A8A6C8B199A27C944CC853D7 /* PitchReadout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchReadout.swift; sourceTree = "<group>"; };
+		AD54C2510E833D8C0CD5213D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B607E64C2728311B27797A12 /* SitarSynthBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SitarSynthBridge.mm; sourceTree = "<group>"; };
+		B9DFA493B1441765290241DB /* SustainStarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainStarView.swift; sourceTree = "<group>"; };
+		C28322C892DE949ADEBCA88D /* MusicTheory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicTheory.swift; sourceTree = "<group>"; };
+		D05FF3570D23F986E35C94DA /* RootKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootKeyboardView.swift; sourceTree = "<group>"; };
+		DEE3810D6437E513841CCA27 /* GridSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSurfaceView.swift; sourceTree = "<group>"; };
+		EB7925DB07CE4D18FAA4286A /* FaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaderView.swift; sourceTree = "<group>"; };
+		F48EE050368BF5C3E53C9CCB /* DelayLine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DelayLine.hpp; sourceTree = "<group>"; };
+		F7C243736AD23906486C6673 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FA09B99305E53D03207128D4 /* GridSurfaceRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSurfaceRepresentable.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0F69528D457E4CE88DB37818 /* DSP */ = {
+			isa = PBXGroup;
+			children = (
+				F48EE050368BF5C3E53C9CCB /* DelayLine.hpp */,
+				2BD7FE3FE2A4CFAD6277952E /* SitarSynth.cpp */,
+				A17EBF656219C62272D1D672 /* SitarSynth.hpp */,
+			);
+			path = DSP;
+			sourceTree = "<group>";
+		};
+		1027D2351F6DCE00F7FCDEC8 = {
+			isa = PBXGroup;
+			children = (
+				E71051367292C972F3BCD08D /* Sources */,
+				E04AC2D5D6B5999CFCB93AB9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1C6A4836A11BEE1DF1CA0BC1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9B18C4A3DFE73168F1F690B7 /* AppState.swift */,
+				C28322C892DE949ADEBCA88D /* MusicTheory.swift */,
+				A8A6C8B199A27C944CC853D7 /* PitchReadout.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		534F6D8B4AA1DD75BF2FF38B /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				92034692C100E8B8F3285836 /* SitarSynthBridge.h */,
+				B607E64C2728311B27797A12 /* SitarSynthBridge.mm */,
+				0BB80F0B114B20FAF768651D /* Zitara-Bridging-Header.h */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		6680D5FB31072462D3D8A239 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				07AF8D8AB504BB60D694DF02 /* ControlPanelView.swift */,
+				EB7925DB07CE4D18FAA4286A /* FaderView.swift */,
+				FA09B99305E53D03207128D4 /* GridSurfaceRepresentable.swift */,
+				DEE3810D6437E513841CCA27 /* GridSurfaceView.swift */,
+				6CFE88EFD13C4B4F60EA05AF /* PitchReadoutView.swift */,
+				D05FF3570D23F986E35C94DA /* RootKeyboardView.swift */,
+				448CBA96E37589F71300AA46 /* ScaleMenuView.swift */,
+				B9DFA493B1441765290241DB /* SustainStarView.swift */,
+				AD54C2510E833D8C0CD5213D /* Theme.swift */,
+				374289BB29E80CB3E5F02EB8 /* TouchFeedbackView.swift */,
+				5845FC1CAF68226C6C3BFEB1 /* XYPadView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		6E86D51CFEC67AF4AA1E8A01 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				89BFC8C0BAD31971417BF940 /* ContentView.swift */,
+				337B74760E3159F2B94606F1 /* ZitaraApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		CDC96E2E903171F1A633860B /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				5205855425D9A41E6CFEA68B /* AudioEngine.swift */,
+				534F6D8B4AA1DD75BF2FF38B /* Bridge */,
+				0F69528D457E4CE88DB37818 /* DSP */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		E04AC2D5D6B5999CFCB93AB9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1436425F14E13B593C995B10 /* Zitara.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E71051367292C972F3BCD08D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F7C243736AD23906486C6673 /* Assets.xcassets */,
+				6E86D51CFEC67AF4AA1E8A01 /* App */,
+				CDC96E2E903171F1A633860B /* Audio */,
+				1C6A4836A11BEE1DF1CA0BC1 /* Model */,
+				6680D5FB31072462D3D8A239 /* UI */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B07D614DF5EBC6F251400B8F /* Zitara */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C73BF1348A5724A7BB1770EE /* Build configuration list for PBXNativeTarget "Zitara" */;
+			buildPhases = (
+				162401440D8AECA529744C00 /* Sources */,
+				DBBF40C1EEF816BF41F12592 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Zitara;
+			packageProductDependencies = (
+			);
+			productName = Zitara;
+			productReference = 1436425F14E13B593C995B10 /* Zitara.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81A3E433C62842949383E7C3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					B07D614DF5EBC6F251400B8F = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DF9FDD894BA3F5E77F082AC7 /* Build configuration list for PBXProject "Zitara" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 1027D2351F6DCE00F7FCDEC8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E04AC2D5D6B5999CFCB93AB9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B07D614DF5EBC6F251400B8F /* Zitara */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DBBF40C1EEF816BF41F12592 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4583656756C828D983221A87 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		162401440D8AECA529744C00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47BAF5022415D0834FD6F0D7 /* AppState.swift in Sources */,
+				27C7DBA0BB518EE7828F69FF /* AudioEngine.swift in Sources */,
+				F04263A0F341B4B43431BE3A /* ContentView.swift in Sources */,
+				B11B893461BFD1322300DF65 /* ControlPanelView.swift in Sources */,
+				DD3ABE812CD24FD6A6BDFC9A /* FaderView.swift in Sources */,
+				718D5B5388E4394D0F29A16A /* GridSurfaceRepresentable.swift in Sources */,
+				D7237AA7E8CEB2B825D4EB32 /* GridSurfaceView.swift in Sources */,
+				8F3FE8098AEC544F2245302B /* MusicTheory.swift in Sources */,
+				1BAB773A856EF7250A9E1EDE /* PitchReadout.swift in Sources */,
+				9F055320C17F271A79E7F55E /* PitchReadoutView.swift in Sources */,
+				F32E938BF8585F63AA528345 /* RootKeyboardView.swift in Sources */,
+				5C9D03CB219BCD78CD2B473E /* ScaleMenuView.swift in Sources */,
+				8B945CF1B1C43BCACB10C26A /* SitarSynth.cpp in Sources */,
+				413FB0AE7C09E00CCF3D9F42 /* SitarSynthBridge.mm in Sources */,
+				B13867E5D5B56D314597F96D /* SustainStarView.swift in Sources */,
+				15A25C3C4A4878D24E371B32 /* Theme.swift in Sources */,
+				88793F97B0DEA7FE8007C230 /* TouchFeedbackView.swift in Sources */,
+				728B9838F0864FA204E5CC77 /* XYPadView.swift in Sources */,
+				FC876EC9CE3A48FB20D71BA5 /* ZitaraApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		246622E1F9AD21D6A11A0B62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4071FB98E6F11F93B74845FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		580306E27969CA9848CBC159 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.Zitara;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Audio/Bridge/Zitara-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		73689408D308E061D9B5E66E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourname.Zitara;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Audio/Bridge/Zitara-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C73BF1348A5724A7BB1770EE /* Build configuration list for PBXNativeTarget "Zitara" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73689408D308E061D9B5E66E /* Debug */,
+				580306E27969CA9848CBC159 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DF9FDD894BA3F5E77F082AC7 /* Build configuration list for PBXProject "Zitara" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				246622E1F9AD21D6A11A0B62 /* Debug */,
+				4071FB98E6F11F93B74845FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 81A3E433C62842949383E7C3 /* Project object */;
+}
