@@ -8,8 +8,13 @@ import Combine
 final class AppState: ObservableObject {
 
     let audioEngine = AudioEngine()
-    let layout = GridLayout.standard
     let readout = PitchReadout()
+
+    /// User-facing message when audio can't run; nil when all is well.
+    @Published private(set) var audioError: String?
+
+    /// First-launch help. Persisted so it shows once; reopenable from the UI.
+    @Published var showingHelp: Bool
 
     /// Factory values — initial state and the target of double-tap reset.
     enum Defaults {
@@ -47,7 +52,7 @@ final class AppState: ObservableObject {
     @Published private(set) var sympMix:    Float = Defaults.sympMix
     @Published private(set) var room:       Float = Defaults.room
 
-    // Sustain star: held state + vibrato that its drag drives.
+    // Sustain button: held state + vibrato that its drag drives.
     // vibratoDepth in cents (0...50 typical), vibratoRate in Hz (2...8 typical).
     @Published private(set) var sustainHold: Bool  = false
     @Published private(set) var vibratoRate: Float = 5.0
@@ -64,7 +69,71 @@ final class AppState: ObservableObject {
     func setVibratoRate(_ hz: Float)      { vibratoRate = hz;     audioEngine.setVibratoRate(hz) }
     func setVibratoDepth(_ cents: Float)  { vibratoDepth = cents; audioEngine.setVibratoDepth(cents) }
 
+    // MARK: - Init / persistence
+    //
+    // Saved on backgrounding (see ZitaraApp), not per change: the XY pad and
+    // faders change at touch rate and there's no value in writing that often.
+
+    private enum Key {
+        static let scale = "scale", root = "root"
+        static let brightness = "brightness", buzz = "buzz", sustain = "sustain"
+        static let glide = "glide", sympMix = "sympMix", room = "room"
+        static let seenHelp = "seenHelp"
+    }
+
+    init() {
+        let d = UserDefaults.standard
+        func float(_ key: String, _ fallback: Float) -> Float {
+            d.object(forKey: key) == nil ? fallback : min(max(d.float(forKey: key), 0), 1)
+        }
+        if let name = d.string(forKey: Key.scale),
+           let saved = Scale.all.first(where: { $0.name == name }) {
+            scale = saved
+        }
+        if d.object(forKey: Key.root) != nil,
+           let saved = RootNote(rawValue: d.integer(forKey: Key.root)) {
+            root = saved
+        }
+        brightness = float(Key.brightness, Defaults.brightness)
+        buzz       = float(Key.buzz,       Defaults.buzz)
+        sustain    = float(Key.sustain,    Defaults.sustain)
+        glide      = float(Key.glide,      Defaults.glide)
+        sympMix    = float(Key.sympMix,    Defaults.sympMix)
+        room       = float(Key.room,       Defaults.room)
+        showingHelp = !d.bool(forKey: Key.seenHelp)
+
+        audioEngine.onFailure = { [weak self] message in
+            self?.audioError = message
+        }
+    }
+
+    func save() {
+        let d = UserDefaults.standard
+        d.set(scale.name, forKey: Key.scale)
+        d.set(root.rawValue, forKey: Key.root)
+        d.set(brightness, forKey: Key.brightness)
+        d.set(buzz, forKey: Key.buzz)
+        d.set(sustain, forKey: Key.sustain)
+        d.set(glide, forKey: Key.glide)
+        d.set(sympMix, forKey: Key.sympMix)
+        d.set(room, forKey: Key.room)
+    }
+
+    func dismissHelp() {
+        showingHelp = false
+        UserDefaults.standard.set(true, forKey: Key.seenHelp)
+    }
+
     // MARK: - Lifecycle
+
+    /// Back in the foreground: audio may have been stopped while away.
+    func resume() {
+        audioEngine.resumeIfNeeded()
+    }
+
+    func retryAudio() {
+        audioEngine.start()
+    }
 
     func start() {
         audioEngine.start()

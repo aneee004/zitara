@@ -17,7 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// Note events (monophonic, last-note priority handled by caller).
 - (void)noteOnWithFrequency:(float)freq velocity:(float)velocity;
 - (void)slideToFrequency:(float)freq;
+/// Hammer-on / pull-off: fast pitch step with a light re-excitation (accent
+/// 0...1), no full pluck. Gate stays open.
+- (void)legatoToFrequency:(float)freq accent:(float)accent;
 - (void)noteOff;
+
+/// Live per-note dynamics, 0...1 (1 = neutral). Driven by Pencil pressure.
+- (void)setExpression:(float)value;
 
 /// Live modulation (XY pad). Both in 0...1.
 - (void)setBrightness:(float)value;
@@ -29,10 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setSympMix:(float)value;
 - (void)setRoom:(float)value;
 
-/// Sustain star button. Holds gate open while pressed.
+/// Sustain button. Holds gate open while pressed.
 - (void)setSustainHold:(BOOL)held;
 
-/// Vibrato (driven by drag on the sustain star).
+/// Vibrato (driven by drag on the sustain button).
 - (void)setVibratoRate:(float)hz;
 - (void)setVibratoDepth:(float)cents;
 

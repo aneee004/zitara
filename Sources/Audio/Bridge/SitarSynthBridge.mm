@@ -25,6 +25,17 @@
     _synth.params.targetFreqHz.store(freq, std::memory_order_relaxed);
 }
 
+- (void)legatoToFrequency:(float)freq accent:(float)accent {
+    _synth.params.targetFreqHz.store(freq, std::memory_order_relaxed);
+    _synth.params.legatoAccent.store(std::clamp(accent, 0.0f, 1.0f), std::memory_order_relaxed);
+    _synth.params.gate.store(true, std::memory_order_relaxed);
+    _synth.params.legatoCount.fetch_add(1, std::memory_order_relaxed);
+}
+
+- (void)setExpression:(float)value {
+    _synth.params.expression.store(std::clamp(value, 0.0f, 1.0f), std::memory_order_relaxed);
+}
+
 - (void)noteOff {
     _synth.params.gate.store(false, std::memory_order_relaxed);
 }

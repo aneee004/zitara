@@ -3,10 +3,17 @@ import UIKit
 /// The playable grid. UIKit (not SwiftUI) on purpose: raw UITouch handling
 /// gives us the lowest-latency, most controllable multitouch pipeline.
 ///
-/// Monophonic, last-note priority:
-///  - A new touch always steals the voice.
-///  - Sliding a finger horizontally bends pitch continuously (meend).
-///  - The row is locked at touch-down; slides are horizontal only (v1).
+/// Monophonic, last-note priority, played like a string:
+///  - A new touch always takes the voice. On a DIFFERENT row (string) it
+///    plucks; on the SAME row as the sounding note it's a hammer-on — the
+///    pitch steps without a re-pluck, so trills and murki stay legato.
+///  - Lifting the sounding finger while others are down pulls off to the
+///    most recent finger still down (at wherever it has slid to).
+///  - Only the sounding finger bends pitch (meend). The row is locked at
+///    touch-down; slides are horizontal only (v1).
+///  - Apple Pencil works as a plectrum with pressure: touch-down pressure
+///    sets the pluck, and pressure while held swells the note (onPressure).
+///    Fingers report a constant full pressure, so they play as before.
 ///
 /// Rendering style is "rosewood": flat filled tiles on dark wood — brass for
 /// Sa, ivory for in-scale, near-invisible for out-of-scale. While a note
@@ -16,13 +23,26 @@ final class GridSurfaceView: UIView {
 
     // MARK: - Configuration
 
-    var layout: GridLayout = .standard { didSet { setNeedsDisplay() } }
+    var layout: GridLayout = .portrait {
+        didSet {
+            guard layout != oldValue else { return }
+            // The held cell's row/col no longer means the same pitch; release
+            // rather than leave a note stuck on a stale anchor.
+            releaseAll()
+            setNeedsDisplay()
+            refreshLit()
+        }
+    }
     var coloring: ScaleColoring? { didSet { setNeedsDisplay() } }
 
     // MARK: - Event callbacks (wired to AudioEngine)
 
     var onNoteOn: ((Double, Float) -> Void)?
     var onSlide: ((Double) -> Void)?
+    /// Pitch change without a pluck: (midi, kind, velocity).
+    var onLegato: ((Double, LegatoKind, Float) -> Void)?
+    /// Live dynamics of the sounding note, 0...1. Sent before each attack.
+    var onPressure: ((Float) -> Void)?
     var onNoteOff: (() -> Void)?
 
     /// Returns the live envelope level so the touch overlay can bloom with it.
@@ -30,12 +50,24 @@ final class GridSurfaceView: UIView {
         didSet { feedback.envelopeProvider = envelopeProvider }
     }
 
-    // MARK: - Active touch state (monophonic)
+    // MARK: - Held fingers (monophonic voice, multi-finger stack)
 
-    private var activeTouch: UITouch?
-    private var anchorX: CGFloat = 0
-    private var anchorMidi: Double = 0
-    private var activeRow: Int = 0
+    private struct HeldFinger {
+        let touch: UITouch
+        let row: Int
+        /// Screen x of the attacked cell's center; slides measure from here.
+        let anchorX: CGFloat
+        let anchorMidi: Double
+        var midi: Double
+    }
+
+    /// In touch-down order. Invariant: the LAST element is the sounding one.
+    private var held: [HeldFinger] = []
+
+    /// Recent pressure of the sounding touch. Pencil force sags as it lifts;
+    /// on release we restore the recent peak so the tail isn't choked.
+    private var pressureHistory: [(time: TimeInterval, value: Float)] = []
+    private static let liftGuardWindow: TimeInterval = 0.08
 
     // MARK: - Visual overlays
 
@@ -58,7 +90,7 @@ final class GridSurfaceView: UIView {
     }
 
     private func commonInit() {
-        isMultipleTouchEnabled = true // we receive all touches; voice stealing picks one
+        isMultipleTouchEnabled = true // every finger is tracked for hammer-ons / pull-offs
         backgroundColor = Theme.gridCanvasUI
         contentMode = .redraw
         litLayer.fillColor   = Theme.cellLitFillUI.cgColor
@@ -123,64 +155,139 @@ final class GridSurfaceView: UIView {
     // MARK: - Touch handling
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        startNote(with: touch)
+        // Simultaneous touch-downs are rare; order among them is arbitrary.
+        for touch in touches { press(touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let active = activeTouch, touches.contains(active) else { return }
-        let point = active.location(in: self)
-        let deltaSemis = Double((point.x - anchorX) / cellSize)
-        onSlide?(anchorMidi + deltaSemis)
-        setLit(midi: Int((anchorMidi + deltaSemis).rounded()))
-        feedback.moved(to: point)
+        for i in held.indices where touches.contains(held[i].touch) {
+            let point = held[i].touch.location(in: self)
+            held[i].midi = held[i].anchorMidi + Double((point.x - held[i].anchorX) / cellSize)
+            // Background fingers just track position, ready for a pull-off.
+            guard i == held.count - 1 else { continue }
+            // Pencil delivers moves on force change alone, so this streams
+            // pressure even when the tip is still.
+            if held[i].touch.type == .pencil {
+                sendPressure(Self.pressure(for: held[i].touch), at: held[i].touch.timestamp)
+            }
+            onSlide?(held[i].midi)
+            setLit(midi: Int(held[i].midi.rounded()))
+            feedback.moved(to: point)
+        }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        endIfActive(touches)
+        lift(touches)
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        endIfActive(touches)
+        lift(touches)
     }
 
-    private func startNote(with touch: UITouch) {
+    private func press(_ touch: UITouch) {
         let point = touch.location(in: self)
         // Ignore taps in the letterbox — they'd be confusing musically.
         guard pointIsInGrid(point) else { return }
 
         let r = row(forY: point.y)
         let c = col(forX: point.x)
-
-        activeTouch = touch          // last-note priority: steal unconditionally
-        activeRow = r
         // Quantized attack from the cell's screen-center, then slide from there.
-        anchorX = gridOrigin.x + (CGFloat(c) + 0.5) * cellSize
-        anchorMidi = Double(layout.midiNote(row: r, col: c))
+        let anchorX = gridOrigin.x + (CGFloat(c) + 0.5) * cellSize
+        let anchorMidi = Double(layout.midiNote(row: r, col: c))
+        let midi = anchorMidi + Double((point.x - anchorX) / cellSize)
+        let velocity = Self.velocity(for: touch)
 
-        // Approximate velocity from touch radius (no pressure on iPad touch).
-        let radius = touch.majorRadius
-        let velocity = Float(min(max((radius - 8) / 30, 0.35), 1.0))
+        let isHammerOn = held.last?.row == r
+        held.append(HeldFinger(touch: touch, row: r, anchorX: anchorX,
+                               anchorMidi: anchorMidi, midi: midi))
 
-        onNoteOn?(anchorMidi, velocity)
-        // Immediately account for finger being off-center at attack:
-        let deltaSemis = Double((point.x - anchorX) / cellSize)
-        if abs(deltaSemis) > 0.001 { onSlide?(anchorMidi + deltaSemis) }
+        // Before the attack, so the pluck starts at the right level.
+        pressureHistory.removeAll()
+        sendPressure(Self.pressure(for: touch), at: touch.timestamp)
+
+        if isHammerOn {
+            onLegato?(midi, .hammerOn, velocity)
+        } else {
+            onNoteOn?(anchorMidi, velocity)
+            // Immediately account for finger being off-center at attack.
+            if abs(midi - anchorMidi) > 0.001 { onSlide?(midi) }
+        }
 
         setLit(midi: Int(anchorMidi))
         feedback.began(at: point, cellRect: cellRect(row: r, col: c),
                        cornerRadius: Self.cornerRadius)
     }
 
-    private func endIfActive(_ touches: Set<UITouch>) {
-        guard let active = activeTouch, touches.contains(active) else { return }
-        activeTouch = nil
+    private func lift(_ touches: Set<UITouch>) {
+        let wasSounding = held.last.map { touches.contains($0.touch) } ?? false
+        held.removeAll { touches.contains($0.touch) }
+        guard wasSounding else { return }
+
+        guard let next = held.last else {
+            // Restore the recent peak: the tip's sag during lift-off would
+            // otherwise mute the release tail.
+            if let peak = pressureHistory.map(\.value).max() { onPressure?(peak) }
+            pressureHistory.removeAll()
+            onNoteOff?()
+            setLit(midi: nil)
+            feedback.ended()
+            return
+        }
+        // Pull-off: fall back to the most recent finger still down; dynamics
+        // now follow that touch.
+        pressureHistory.removeAll()
+        sendPressure(Self.pressure(for: next.touch), at: next.touch.timestamp)
+        onLegato?(next.midi, .pullOff, Self.velocity(for: next.touch))
+        setLit(midi: Int(next.midi.rounded()))
+        // No ring: that finger was already down; just move the bloom to it.
+        feedback.began(at: next.touch.location(in: self), cellRect: nil,
+                       cornerRadius: Self.cornerRadius)
+    }
+
+    /// Layout swap mid-performance: held fingers' cells no longer mean the
+    /// same pitches, so release cleanly rather than leave a stale note.
+    private func releaseAll() {
+        guard !held.isEmpty else { return }
+        held.removeAll()
+        pressureHistory.removeAll()
         onNoteOff?()
         setLit(midi: nil)
         feedback.ended()
     }
 
+    private func sendPressure(_ value: Float, at time: TimeInterval) {
+        pressureHistory.append((time, value))
+        pressureHistory.removeAll { time - $0.time > Self.liftGuardWindow }
+        onPressure?(value)
+    }
+
+    /// Pencil: pressure-based, with a floor because touch-down force is
+    /// usually still ramping (the live swell carries the rest). Finger:
+    /// approximated from touch radius, since finger touches report no force.
+    private static func velocity(for touch: UITouch) -> Float {
+        if touch.type == .pencil {
+            return 0.5 + 0.5 * pressure(for: touch)
+        }
+        return Float(min(max((touch.majorRadius - 8) / 30, 0.35), 1.0))
+    }
+
+    /// 0...1 dynamics. Pencil: normalized force, reaching full at half the
+    /// device maximum (a firm but comfortable press), on a curve that gives
+    /// light touches more resolution. Fingers: always full.
+    private static func pressure(for touch: UITouch) -> Float {
+        guard touch.type == .pencil, touch.maximumPossibleForce > 0 else { return 1 }
+        let n = min(touch.force / (touch.maximumPossibleForce * 0.5), 1)
+        return Float(pow(n, 0.7))
+    }
+
     // MARK: - Same-pitch lighting
+
+    /// Geometry or layout changed; rebuild the lit path against new cell rects.
+    private func refreshLit() {
+        let lit = litMidi
+        litMidi = nil
+        setLit(midi: lit)
+    }
 
     private func setLit(midi: Int?) {
         guard midi != litMidi else { return }
@@ -283,10 +390,7 @@ final class GridSurfaceView: UIView {
         super.layoutSubviews()
         feedback.frame = bounds
         litLayer.frame = bounds
-        // Geometry changed; recompute the lit path against new cell rects.
-        let lit = litMidi
-        litMidi = nil
-        setLit(midi: lit)
+        refreshLit()
         setNeedsDisplay()
     }
 }

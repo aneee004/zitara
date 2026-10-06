@@ -10,7 +10,7 @@ musicians / multi-instrumentalists.
 
 ## Target & constraints
 
-- Device: iPad Pro 12.9" 6th gen (M2). Deployment target: iPadOS 16.0. iPad only, landscape only.
+- Device: iPad Pro 12.9" 6th gen (M2). Deployment target: iPadOS 16.0. iPad only, portrait + landscape (layout adapts; see `ContentView`).
 - Signing: FREE Apple ID provisioning. Do NOT add entitlements that require a
   paid account (iCloud, push, App Groups, etc.). 7-day signing expiry is expected.
 - No third-party dependencies. Raw AVAudioEngine + custom C++ DSP by design.
@@ -20,12 +20,19 @@ musicians / multi-instrumentalists.
 Touch/UI (main thread)  ->  atomics in SynthParams  ->  C++ render (RT thread)
 
 - `Sources/UI/GridSurfaceView.swift` — UIKit playing surface. Raw UITouch
-  handling for latency. Monophonic, LAST-NOTE PRIORITY (new touch steals voice).
-  Attack is pitch-quantized to the cell; horizontal slides are continuous
-  (row locked at touch-down). Emits closures: onNoteOn(midiDouble, velocity),
-  onSlide(midiDouble), onNoteOff().
+  handling for latency. Monophonic, LAST-NOTE PRIORITY (new touch steals voice)
+  over a stack of held fingers: a new touch on the SAME row as the sounding
+  note is a hammer-on (no re-pluck); lifting the sounding finger pulls off to
+  the most recent finger still down. Attack is pitch-quantized to the cell;
+  horizontal slides are continuous (row locked at touch-down). Emits closures:
+  onNoteOn(midiDouble, velocity), onSlide(midiDouble),
+  onLegato(midiDouble, LegatoKind, velocity), onPressure(0...1), onNoteOff().
+  Apple Pencil pressure sets pluck velocity and live per-note dynamics
+  (`expression` in SynthParams); fingers always report pressure 1.
 - `Sources/Audio/AudioEngine.swift` — AVAudioEngine + AVAudioSourceNode (mono,
   Float32, hardware sample rate, ~5 ms IO buffer). Forwards events to the bridge.
+  Recovers from interruptions, route/config changes (re-prepares the synth at
+  the new rate) and media-services resets; reports failures via `onFailure`.
 - `Sources/Audio/Bridge/` — Obj-C++ wrapper (`SitarSynthBridge`) exposed to
   Swift via bridging header. Setters write atomics only; render is RT-only.
 - `Sources/Audio/DSP/SitarSynth.{hpp,cpp}` — the instrument:
@@ -38,7 +45,13 @@ Touch/UI (main thread)  ->  atomics in SynthParams  ->  C++ render (RT thread)
     selected scale shapes the SOUND, not just the visuals.
 - `Sources/Model/` — scales (incl. Carnatic-flavored names), fourths grid
   layout (row 0 = bottom, `midi = base + row*5 + col`), scale coloring,
-  `AppState` (ObservableObject, owns AudioEngine).
+  `AppState` (ObservableObject, owns AudioEngine; persists scale/root/tone/
+  faders to UserDefaults on backgrounding, plus the first-launch help flag).
+- Layout: `ContentView` picks portrait bar / landscape column, and a compact
+  variant for every iPad smaller than 12.9"/13" (faders collapse into a
+  "Shape" popover). Check new chrome on the iPad mini simulator.
+- `Sources/PrivacyInfo.xcprivacy` — declares UserDefaults (CA92.1), no
+  tracking, no data collected. Update it if you add required-reason APIs.
 
 ## Real-time safety rules (NON-NEGOTIABLE)
 
@@ -47,8 +60,12 @@ On the audio render thread (`SitarSynth::render`, everything it calls):
   bridge render call, NO Swift runtime calls, NO logging, NO file I/O.
 - UI -> audio communication is ONLY via `std::atomic` in `SynthParams`
   (relaxed ordering is fine — values are independent). Note triggering uses
-  the `pluckCount` increment-and-detect pattern.
+  the `pluckCount` / `legatoCount` increment-and-detect pattern.
 - `DelayLine::resize()/clear()` only before engine start.
+- UI params arrive once per block; anything that shapes the sound
+  continuously must be smoothed per sample (see `paramCoef`) or it clicks.
+- Exactly ONE AVAudioSourceNode may render the synth: `buildAndStart()`
+  detaches the previous node before attaching a new one.
 - If a feature needs richer messaging (e.g., polyphony events), introduce a
   lock-free SPSC ring buffer — never a mutex.
 

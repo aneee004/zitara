@@ -50,7 +50,9 @@ final class TouchFeedbackView: UIView {
 
     // MARK: - Public event API (called by GridSurfaceView)
 
-    func began(at point: CGPoint, cellRect: CGRect, cornerRadius: CGFloat) {
+    /// `cellRect` nil = no attack ring (e.g. a pull-off to a finger that was
+    /// already down).
+    func began(at point: CGPoint, cellRect: CGRect?, cornerRadius: CGFloat) {
         isActive = true
         trailPoints = [point]
 
@@ -59,7 +61,7 @@ final class TouchFeedbackView: UIView {
         trailLayer.opacity = 1.0
         trailLayer.path = nil
 
-        addAttackRing(rect: cellRect, cornerRadius: cornerRadius)
+        if let cellRect { addAttackRing(rect: cellRect, cornerRadius: cornerRadius) }
         startDisplayLink()
     }
 

@@ -17,9 +17,18 @@ struct SynthParams {
     std::atomic<float> targetFreqHz { 220.0f };   // continuous pitch target (meend)
     std::atomic<float> velocity     { 0.8f  };    // 0..1, set before pluck
     std::atomic<int>   pluckCount   { 0     };    // increment to trigger a pluck
+    // Hammer-on / pull-off: increment to jump to targetFreqHz WITHOUT a full
+    // pluck — fast fret-like pitch step (ignores glide) plus a small burst of
+    // `legatoAccent` energy, like a finger landing on or leaving the string.
+    std::atomic<int>   legatoCount  { 0     };
+    std::atomic<float> legatoAccent { 0.0f  };    // 0..1, set before legatoCount
     std::atomic<bool>  gate         { false };    // finger down?
     std::atomic<float> brightness   { 0.6f  };    // XY pad X: string damping
     std::atomic<float> buzz         { 0.4f  };    // XY pad Y: jawari intensity
+    // Live per-note dynamics (Apple Pencil pressure). 1 = full / neutral, so
+    // finger playing is unaffected. Scales string output and darkens slightly
+    // when soft. Never touches loop gain — stability is unchanged.
+    std::atomic<float> expression   { 1.0f  };
     std::atomic<float> sympFreqHz[kNumSympStrings]; // sympathetic tunings
 
     // --- Fader-driven params ------------------------------------------------
@@ -29,7 +38,7 @@ struct SynthParams {
     std::atomic<float> sympMix      { 0.55f };    // dry/wet for the sympathetic halo
     std::atomic<float> roomAmount   { 0.20f };    // tiny plate-ish reverb send
 
-    // --- Sustain button (top-left "star") -----------------------------------
+    // --- Sustain button (under the left thumb) ------------------------------
     // While true, the DSP holds gate high regardless of the grid finger state,
     // so the note keeps ringing after the grid finger releases. Falls back to
     // grid-driven gate when released (natural decay via `sustain` fader).
@@ -76,7 +85,21 @@ private:
     DelayLine mainString;
     float dampState   = 0.0f;   // one-pole damping filter state
     float freqSmooth  = 220.0f; // portamento-smoothed frequency
+    float exprSmooth  = 1.0f;   // smoothed `expression` (pressure jitter → zipper noise)
+
+    // Per-sample smoothed copies of block-rate UI params. UI writes arrive as
+    // steps once per block (~5 ms); applied raw, a fast XY/fader move or a
+    // vibrato release clicks. ~10 ms one-pole on each.
+    float paramCoef      = 0.0f;   // set in prepare()
+    float brightSmooth   = 0.6f;
+    float buzzSmooth     = 0.4f;
+    float vibDepthSmooth = 0.0f;
+    float sympGainSmooth = 0.0f;
+    float roomSmooth     = 0.0f;
     int   lastPluck   = 0;
+    int   lastLegato  = 0;
+    // Samples left in the post-legato fast-glide window.
+    int   legatoFastRemaining = 0;
 
     // Excitation (short noise burst injected into the loop)
     int   exciteRemaining = 0;
