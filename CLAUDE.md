@@ -1,4 +1,4 @@
-# SitarGrid — Project Context for Claude Code
+# Zitara — Project Context for Claude Code
 
 ## What this app is
 
@@ -88,16 +88,16 @@ On the audio render thread (`SitarSynth::render`, everything it calls):
 
 ```bash
 brew install xcodegen   # once
-xcodegen                # regenerate SitarGrid.xcodeproj after project.yml changes
-open SitarGrid.xcodeproj
+xcodegen                # regenerate Zitara.xcodeproj after project.yml changes
+open Zitara.xcodeproj
 ```
 
-- In Xcode: target SitarGrid -> Signing & Capabilities -> set your personal
+- In Xcode: target Zitara -> Signing & Capabilities -> set your personal
   team (free Apple ID), change bundleIdPrefix in project.yml if collisions.
 - iPad: Settings -> Privacy & Security -> Developer Mode ON; trust the Mac;
   first run requires trusting the developer cert in Settings -> General ->
   VPN & Device Management.
-- CLI build check: `xcodebuild -project SitarGrid.xcodeproj -scheme SitarGrid -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO`
+- CLI build check: `xcodebuild -project Zitara.xcodeproj -scheme Zitara -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO`
   (useful for compile-error iteration without a device attached).
 
 ## Roadmap
