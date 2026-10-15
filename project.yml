@@ -1,6 +1,6 @@
 name: Zitara
 options:
-  bundleIdPrefix: com.yourname   # CHANGE THIS to something unique, e.g. com.ravi
+  bundleIdPrefix: com.aniruth    # must be unique per Apple ID for free provisioning
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true
@@ -12,6 +12,9 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - Sources
+    scheme:
+      testTargets:
+        - ZitaraTests
     settings:
       base:
         SWIFT_OBJC_BRIDGING_HEADER: Sources/Audio/Bridge/Zitara-Bridging-Header.h
@@ -42,3 +45,17 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
+
+  ZitaraTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - Tests
+    dependencies:
+      - target: Zitara
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "2"
+        SWIFT_VERSION: "5.0"

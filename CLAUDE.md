@@ -100,6 +100,10 @@ open Zitara.xcodeproj
   VPN & Device Management.
 - CLI build check: `xcodebuild -project Zitara.xcodeproj -scheme Zitara -destination 'generic/platform=iOS' build CODE_SIGNING_ALLOWED=NO`
   (useful for compile-error iteration without a device attached).
+- Unit tests (`Tests/`, model-layer invariants — scale names/intervals, grid
+  mapping, coloring): `xcodebuild test -project Zitara.xcodeproj -scheme Zitara -destination 'platform=iOS Simulator,name=iPad mini (A17 Pro)'`
+- Before a device session, run `docs/HARDWARE_TESTING.md` — it covers only what
+  the simulator can't (latency, multi-touch, Pencil, audio-session robustness).
 
 ## Roadmap
 
