@@ -19,9 +19,13 @@ struct ScaleMenuView: View {
                     Text(scale.displayTitle)
                         .font(Theme.serif(17, weight: .medium))
                         .foregroundColor(Theme.ivory)
-                    Text(scale.displaySubtitle ?? " ")
-                        .font(Theme.serif(12))
-                        .foregroundColor(Theme.textSecondary)
+                    // Full name list where it fits; on narrow panels (iPad mini)
+                    // drop to the Carnatic name rather than truncate mid-word.
+                    // The menu itself always lists every name.
+                    ViewThatFits(in: .horizontal) {
+                        subtitle(scale.displaySubtitle ?? " ")
+                        subtitle(scale.shortSubtitle ?? " ")
+                    }
                 }
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
@@ -37,5 +41,11 @@ struct ScaleMenuView: View {
         }
         .accessibilityLabel("Scale")
         .accessibilityValue(scale.allNames.joined(separator: ", "))
+    }
+
+    private func subtitle(_ text: String) -> some View {
+        Text(text)
+            .font(Theme.serif(12))
+            .foregroundColor(Theme.textSecondary)
     }
 }

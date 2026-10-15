@@ -25,6 +25,8 @@ struct Scale: Identifiable, Hashable {
         let rest = allNames.dropFirst()
         return rest.isEmpty ? nil : rest.joined(separator: " \u{00B7} ")
     }
+    /// Just the second name, for headers too narrow for the full list.
+    var shortSubtitle: String? { allNames.dropFirst().first }
 
     /// Fresh-install choice. Looked up by name, not index, so reordering the
     /// list can't silently change it.
