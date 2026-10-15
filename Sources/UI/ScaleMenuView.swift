@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Scale selector. Raga name first (with the Western name beneath), so long
-/// names never truncate the way they did in a bare menu picker.
+/// Scale selector. Hindustani name first, Carnatic and Western names beneath,
+/// so every player finds the name they know without a tradition setting.
 struct ScaleMenuView: View {
     @Binding var scale: Scale
 
@@ -36,6 +36,6 @@ struct ScaleMenuView: View {
             .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.hairline, lineWidth: 1))
         }
         .accessibilityLabel("Scale")
-        .accessibilityValue(scale.displayTitle)
+        .accessibilityValue(scale.allNames.joined(separator: ", "))
     }
 }

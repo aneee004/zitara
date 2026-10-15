@@ -43,7 +43,8 @@ Touch/UI (main thread)  ->  atomics in SynthParams  ->  C++ render (RT thread)
   - 7 sympathetic string resonators, retuned by the UI to the selected scale
     (`AppState.retuneSympatheticStrings`). This is a signature feature: the
     selected scale shapes the SOUND, not just the visuals.
-- `Sources/Model/` — scales (incl. Carnatic-flavored names), fourths grid
+- `Sources/Model/` — scales (Hindustani / Carnatic / Western names, shown in
+  that order; `Scale.name` is the persisted identity — never rename one), fourths grid
   layout (row 0 = bottom, `midi = base + row*5 + col`), scale coloring,
   `AppState` (ObservableObject, owns AudioEngine; persists scale/root/tone/
   faders to UserDefaults on backgrounding, plus the first-launch help flag).

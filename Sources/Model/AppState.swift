@@ -28,7 +28,7 @@ final class AppState: ObservableObject {
 
     // MARK: - Scale / root
 
-    @Published var scale: Scale = Scale.all[2] {          // Major Pentatonic default
+    @Published var scale: Scale = Scale.launchDefault {
         didSet { retuneSympatheticStrings() }
     }
     @Published var root: RootNote = .d {

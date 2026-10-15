@@ -24,7 +24,8 @@ No samples, no third-party dependencies — AVAudioEngine plus custom C++ DSP.
   swells or fades the note.
 - **Raga-aware sound.** Seven sympathetic (taraf) strings retune to the chosen
   scale and root, so the scale shapes the sound, not just the colours.
-  Scales are listed by raga name first (Mohanam, Shankarabharanam, Kharaharapriya…).
+  Scales are listed by Hindustani name first, then Carnatic and Western
+  (Bhupali · Mohanam · Major Pentatonic), including Yaman, Bhairav and Malkauns.
 - **Shape faders.** Decay, Glide, Taraf and Room. Double-tap any fader to reset.
 - **Live readout.** Note, octave and a ±50¢ meter for landing bends in tune.
 - Portrait and landscape, every iPad size from mini to 13". Settings persist

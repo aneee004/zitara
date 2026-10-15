@@ -3,29 +3,51 @@ import Foundation
 // MARK: - Scale
 
 struct Scale: Identifiable, Hashable {
-    /// Western / descriptive name. Unique — used as the identity.
+    /// Western / descriptive name. Unique, and the identity persisted to
+    /// UserDefaults — never rename an existing entry or saved choices are lost.
     let name: String
-    /// Carnatic raga with the same pitch set, when there is one. Shown first
-    /// in the UI because the classical name is what this audience reaches for.
-    var raga: String? = nil
+    /// Hindustani thaat or raga with this pitch set. Shown first: a sitar
+    /// player reaches for these names before any other.
+    var hindustani: String? = nil
+    /// Carnatic raga with the same pitch set, so South Indian players find
+    /// their name too.
+    var carnatic: String? = nil
     /// Semitone offsets from the root within one octave, ascending.
     let intervals: [Int]
 
     var id: String { name }
 
-    var displayTitle: String { raga ?? name }
-    var displaySubtitle: String? { raga == nil ? nil : name }
+    /// Every name this pitch set goes by, most familiar to the audience first.
+    var allNames: [String] { [hindustani, carnatic, name].compactMap { $0 } }
 
+    var displayTitle: String { allNames[0] }
+    var displaySubtitle: String? {
+        let rest = allNames.dropFirst()
+        return rest.isEmpty ? nil : rest.joined(separator: " \u{00B7} ")
+    }
+
+    /// Fresh-install choice. Looked up by name, not index, so reordering the
+    /// list can't silently change it.
+    static let launchDefault = all.first { $0.name == "Major Pentatonic" }!
+
+    /// Heptatonic (thaat) scales first, then pentatonics, then the rest.
+    /// Pitch sets are the shared aroha; a raga's own phrasing, vakra movement
+    /// and vadi/samvadi are the player's job, not the grid's.
     static let all: [Scale] = [
-        Scale(name: "Major",            raga: "Shankarabharanam", intervals: [0, 2, 4, 5, 7, 9, 11]),
-        Scale(name: "Natural Minor",    raga: "Natabhairavi",     intervals: [0, 2, 3, 5, 7, 8, 10]),
-        Scale(name: "Major Pentatonic", raga: "Mohanam",          intervals: [0, 2, 4, 7, 9]),
-        Scale(name: "Minor Pentatonic", raga: "Shuddha Dhanyasi", intervals: [0, 3, 5, 7, 10]),
-        Scale(name: "Blues",                                      intervals: [0, 3, 5, 6, 7, 10]),
-        Scale(name: "Dorian",           raga: "Kharaharapriya",   intervals: [0, 2, 3, 5, 7, 9, 10]),
-        Scale(name: "Phrygian",         raga: "Hanumatodi",       intervals: [0, 1, 3, 5, 7, 8, 10]),
-        Scale(name: "Mixolydian",       raga: "Harikambhoji",     intervals: [0, 2, 4, 5, 7, 9, 10]),
-        Scale(name: "Mixolydian \u{266D}6", raga: "Charukesi",      intervals: [0, 2, 4, 5, 7, 8, 10]),
+        Scale(name: "Major",               hindustani: "Bilawal",  carnatic: "Shankarabharanam", intervals: [0, 2, 4, 5, 7, 9, 11]),
+        Scale(name: "Lydian",              hindustani: "Yaman",    carnatic: "Kalyani",          intervals: [0, 2, 4, 6, 7, 9, 11]),
+        Scale(name: "Mixolydian",          hindustani: "Khamaj",   carnatic: "Harikambhoji",     intervals: [0, 2, 4, 5, 7, 9, 10]),
+        Scale(name: "Dorian",              hindustani: "Kafi",     carnatic: "Kharaharapriya",   intervals: [0, 2, 3, 5, 7, 9, 10]),
+        Scale(name: "Natural Minor",       hindustani: "Asavari",  carnatic: "Natabhairavi",     intervals: [0, 2, 3, 5, 7, 8, 10]),
+        Scale(name: "Phrygian",            hindustani: "Bhairavi", carnatic: "Hanumatodi",       intervals: [0, 1, 3, 5, 7, 8, 10]),
+        Scale(name: "Double Harmonic",     hindustani: "Bhairav",  carnatic: "Mayamalavagowla",  intervals: [0, 1, 4, 5, 7, 8, 11]),
+        // Charukesi is a Carnatic raga that Hindustani players also play under the
+        // same name, so one entry covers both traditions.
+        Scale(name: "Mixolydian \u{266D}6",                     carnatic: "Charukesi",        intervals: [0, 2, 4, 5, 7, 8, 10]),
+        Scale(name: "Major Pentatonic",    hindustani: "Bhupali",  carnatic: "Mohanam",          intervals: [0, 2, 4, 7, 9]),
+        Scale(name: "Minor Pentatonic",    hindustani: "Dhani",    carnatic: "Shuddha Dhanyasi", intervals: [0, 3, 5, 7, 10]),
+        Scale(name: "Minor Pentatonic \u{266D}6", hindustani: "Malkauns", carnatic: "Hindolam", intervals: [0, 3, 5, 8, 10]),
+        Scale(name: "Blues",                                                                     intervals: [0, 3, 5, 6, 7, 10]),
     ]
 }
 
