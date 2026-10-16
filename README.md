@@ -8,6 +8,14 @@ sympathetic strings that retune to the selected raga.
 
 No samples, no third-party dependencies — AVAudioEngine plus custom C++ DSP.
 
+<p align="center">
+  <img src="docs/screenshots/landscape.jpg" alt="Zitara in landscape: control column with sustain ring, tone pad, scale menu (Bhupali), root keys and faders beside the fourths grid" width="100%">
+</p>
+<p align="center">
+  <img src="docs/screenshots/portrait.jpg" alt="Zitara in portrait: control bar above the fourths grid, Bhupali on D with Sa cells in brass" width="60%">
+</p>
+<p align="center"><sub>Bhupali on D, iPad Pro 13". Sa is brass, in-scale notes ivory, the rest recede.</sub></p>
+
 ## Features
 
 - **Fourths grid.** Bottom-left is E2; each row is a "string" a fourth above
